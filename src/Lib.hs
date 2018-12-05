@@ -9,7 +9,7 @@ data Comp a = Leaf a
 test :: IO ()
 test = putStrLn "Hello World"
 
--- returns a list of tuples containing the frequency of an element and the element
+{- returns a list of tuples containing the frequency of an element and the element -}
 frequency :: Eq a => [a] -> [(Int, a)]
 frequency xs = let
  unique xs [] = xs
@@ -18,3 +18,17 @@ frequency xs = let
  count xs [] = []
  count xs (u:us) = (length $ filter (==u) xs,u):count xs us
  in count xs (unique [] xs)
+
+order :: [(Int, a)] -> [(Int, a)]
+order [] = []
+order [x] = [x]
+order xs = let
+ h1 = take (length xs `div` 2) xs
+ h2 = drop (length xs `div` 2) xs
+ in sortInsert (order h1) (order h2)
+
+sortInsert :: [(Int, a)] -> [(Int, a)] -> [(Int, a)]
+sortInsert (x:xs) (y:ys) | fst x <= fst y = sortInsert xs (x:y:ys)
+                         | otherwise      = y:sortInsert (x:xs) ys
+sortInsert [] ys = ys
+sortInsert xs [] = xs
