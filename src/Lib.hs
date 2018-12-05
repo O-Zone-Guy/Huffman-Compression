@@ -15,8 +15,7 @@ frequency xs = let
  unique xs [] = xs
  unique xs (y:ys) | y `elem` xs = unique xs ys
                   | otherwise   = unique (y:xs) ys
- count xs [] = []
- count xs (u:us) = (length $ filter (==u) xs,u):count xs us
+ count xs = map (\u-> (length (filter (==u) xs),u))
  in count xs (unique [] xs)
 
 order :: [(Int, a)] -> [(Int, a)]
