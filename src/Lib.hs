@@ -28,7 +28,7 @@ order xs = let
  in sortInsert (order h1) (order h2)
 
 sortInsert :: [(Int, a)] -> [(Int, a)] -> [(Int, a)]
-sortInsert (x:xs) (y:ys) | fst x <= fst y = sortInsert xs (x:y:ys)
+sortInsert (x:xs) (y:ys) | fst x >= fst y = sortInsert xs (x:y:ys)
                          | otherwise      = y:sortInsert (x:xs) ys
 sortInsert [] ys = ys
 sortInsert xs [] = xs
