@@ -1,8 +1,5 @@
 module Lib where
 
-import Numeric
-import Data.Char
-
 --TODO COMMENTS, MAKE THEM
 data Comp a = Leaf a
             | Branch a (Comp a)
