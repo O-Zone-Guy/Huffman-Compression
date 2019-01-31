@@ -47,3 +47,12 @@ compressList xs = let
                             | otherwise = comp (x:xs) (n+1) h
  h = sortedToHuff $ order $ frequency xs
  in comp xs 0 h
+
+uncompressList :: [Int] -> Comp a -> [a]
+uncompressList [] _ = []
+uncompressList (n:ns) h = let
+ uncomp n (Leaf x)       | n == 0    = x
+                         | otherwise = error "Wrong Comp data"
+ uncomp n (Branch x c) | n == 0    = x
+                         | otherwise = uncomp (n-1) c
+ in uncomp n h : uncompressList ns h
