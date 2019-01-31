@@ -31,3 +31,8 @@ sortInsert (x:xs) (y:ys) | fst x >= fst y = sortInsert xs (x:y:ys)
                          | otherwise      = y:sortInsert (x:xs) ys
 sortInsert [] ys = ys
 sortInsert xs [] = xs
+
+sortedToHuff :: [(Int, a)] -> Comp a
+sortedToHuff [] = error "Empty list"
+sortedToHuff [x] = Leaf $ snd x
+sortedToHuff (x:xs) = Branch (snd x) (sortedToHuff xs)
