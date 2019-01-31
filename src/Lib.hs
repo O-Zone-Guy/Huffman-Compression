@@ -37,7 +37,7 @@ sortedToHuff [] = error "Empty list"
 sortedToHuff [x] = Leaf $ snd x
 sortedToHuff (x:xs) = Branch (snd x) (sortedToHuff xs)
 
-compressList :: Eq a => [a] -> [Int]
+compressList :: Eq a => [a] -> (Comp a,[Int])
 compressList xs = let
  -- comp :: Eq a => [a] -> Int -> Comp a -> [Int]
  comp [] _ _ = []
@@ -46,13 +46,13 @@ compressList xs = let
  comp (x:xs) n (Branch a c) | x == a    = n: comp xs 0 h
                             | otherwise = comp (x:xs) (n+1) h
  h = sortedToHuff $ order $ frequency xs
- in comp xs 0 h
+ in (h, comp xs 0 h)
 
-uncompressList :: [Int] -> Comp a -> [a]
-uncompressList [] _ = []
-uncompressList (n:ns) h = let
+uncompressList :: (Comp a, [Int]) -> [a]
+uncompressList (_,[]) = []
+uncompressList (h, n:ns) = let
  uncomp n (Leaf x)       | n == 0    = x
                          | otherwise = error "Wrong Comp data"
  uncomp n (Branch x c) | n == 0    = x
                          | otherwise = uncomp (n-1) c
- in uncomp n h : uncompressList ns h
+ in uncomp n h : uncompressList (h,ns)
